@@ -19,7 +19,8 @@ It is built on a foundation of modern, community-standard plugins and a deep res
 <div align="center">
 <pre>
   <img width="1540" height="847" alt="image" src="https://github.com/user-attachments/assets/5f17fbed-988b-495d-886e-b90fdfda6e66" />
-  <img width="1537" height="850" alt="image" src="https://github.com/user-attachments/assets/07bb6a7c-207b-4f7e-965a-aedf48a19206" />
+  <img width="1535" height="856" alt="image" src="https://github.com/user-attachments/assets/d41c3b1b-bf6f-4935-802a-e4e3e78874b5" />
+
 </pre>
 
 </div>
