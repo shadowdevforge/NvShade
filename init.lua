@@ -11,7 +11,6 @@
 -- =============================================================================
 -- This section ensures that the `lazy.nvim` plugin manager is installed automatically
 -- if it's not already present.
-
 vim.g.maplocalleader = " "
 vim.g.mapleader = " "
 

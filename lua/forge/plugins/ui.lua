@@ -3,85 +3,66 @@ return {
   -- Icons
   {
     "nvim-tree/nvim-web-devicons",
-    lazy = true,
+    event = "VeryLazy",
   },
 
   -- Statusline
-{
-  "nvim-lualine/lualine.nvim",
-  lazy = true,
-  event = "VeryLazy",
-  dependencies = { "nvim-tree/nvim-web-devicons", "EdenEast/nightfox.nvim" },
-  config = function()
-    require("lualine").setup({
-      options = {
-        theme = "nightfox",                -- let theme drive colors
-        globalstatus = true,
-        component_separators = { left = "●", right = "●" }, -- circle dots
-        section_separators   = { left = "", right = "" }, -- smooth curves
-        disabled_filetypes   = {},
-      },
-
-      sections = {
-        -- LEFT
-        lualine_a = {
-          { "mode", icon = "", separator = { right = "" } },
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lualine").setup({
+        options = {
+          -- We'll set the theme to 'auto' so it seamlessly adapts to synthweave
+          -- or any other theme the user might choose in their config.
+          theme = "auto",
+          globalstatus = true,
+          -- THE NEW SHARP SEPARATORS
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
+          disabled_filetypes = {},
         },
-        lualine_b = {
-          {
-            "filename",
-            path = 0,
-            symbols = { modified = " ", readonly = " ", unnamed = "[No Name]" },
+
+        sections = {
+          -- LEFT SIDE
+          lualine_a = {
+            { "mode", separator = { right = "" } },
           },
-          { "branch", icon = "" },
-        },
-
-        -- MIDDLE
-        lualine_c = {
-          { function() return "󰽥 NvShade" end, separator = { right = "" }, padding = { left = 1, right = 1 } },
-        },
-
-        -- RIGHT
-        lualine_x = {
-          {
-            "diagnostics",
-            sources = { "nvim_diagnostic" },
-            symbols = { error = " ", warn = " ", info = " ", hint = "󰌵 " },
-            separator = { left = "" },
-            padding = 1,
+          lualine_b = {
+            "branch",
+            "diff",
+            {
+              "diagnostics",
+              sources = { "nvim_diagnostic" },
+              symbols = { error = " ", warn = " ", info = " ", hint = " " },
+            },
           },
-          {
-            function()
-              local clients = vim.lsp.get_clients({ bufnr = 0 })
-              return next(clients) and clients[1].name or "No LSP"
-            end,
-            icon = "",
-            separator = { left = "" },
-            padding = 1,
-          },
-          
-          { "progress", icon = "" },
-        },
-        lualine_y = {
-        {
-          function()
-            return os.date("%H:%M") -- 24h format
-          end,
-          icon = " ", -- clock icon
-        },
-      },
-        lualine_z = {},
-      },
 
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = { "filename" },
-        lualine_c = {},
-        lualine_x = { "location" },
-        lualine_y = {},
-        lualine_z = {},
-      },
-    })
-  end,
-},
+          lualine_c = {
+            {
+              "filename",
+              path = 1,
+            },
+          },
+
+          -- RIGHT SIDE
+          lualine_x = {
+            "filetype",
+          },
+          lualine_y = {
+            "progress",
+          },
+          lualine_z = {
+            { function() return "󰽥 NvShade" end, separator = { left = "" } },
+          },
+        },
+
+        inactive_sections = {
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
+        },
+      })
+    end,
+  },
 }

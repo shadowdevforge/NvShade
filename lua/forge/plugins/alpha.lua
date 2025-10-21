@@ -1,4 +1,3 @@
--- ~/.config/nvim/lua/forge/plugins/alpha.lua
 return {
   "goolord/alpha-nvim",
   event = "VimEnter",
@@ -31,10 +30,11 @@ return {
     dashboard.section.buttons.val = {
       dashboard.button("f", "  Find File", "<Cmd>Telescope find_files<CR>"),
       dashboard.button("n", "  New File", "<Cmd>enew<CR>"),
-      dashboard.button("e", "󰉋  File Explorer", "<Cmd>NvimTreeOpen<CR>"),
       dashboard.button("o", "  Recent Files", "<Cmd>Telescope oldfiles<CR>"),
+      dashboard.button("e", "󰉋  File Explorer", "<Cmd>NvimTreeOpen<CR>"),
+      dashboard.button("t", "󰔎  Theme Explorer", "<Cmd>Themery<CR>"),
       dashboard.button("u", "  Help Uganda", "<Cmd>help iccf<CR>"),
-      dashboard.button("q", "  Quit Nvim", "<Cmd>qa<CR>"),
+      dashboard.button("q", "󰿅  Quit Nvim", "<Cmd>qa<CR>"),
       dashboard.button("", "------------------------------------------------------------------"),
     }
 

@@ -9,7 +9,7 @@ local opt = vim.opt -- For convenience
 --------------------------------------------------------------------------------
 opt.mouse = "a" -- Enable mouse support in all modes
 opt.clipboard = "unnamedplus" -- Use the system clipboard for all yank/delete/put operations
-opt.swapfile = false -- Used modern source control; swapfiles are an annoyance
+opt.swapfile = false -- Use modern source control; swapfiles are an annoyance
 
 -- Persist undo history
 opt.undofile = true

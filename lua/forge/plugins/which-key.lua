@@ -1,34 +1,33 @@
--- ~/.config/nvim/lua/forge/plugins/which-key.lua
 return {
   "folke/which-key.nvim",
-  version = "*", -- Always grab the latest stable
   event = "VeryLazy",
   dependencies = {
     "echasnovski/mini.icons", -- required for icons
   },
   config = function()
-    local wk = require("which-key")
-
-    -- timeout for key combos
+    -- Set the timeout for leader keys
     vim.o.timeout = true
     vim.o.timeoutlen = 300
 
+    local wk = require("which-key")
     wk.setup({
+      plugins = {
+        marks = true, -- shows a list of your marks on ' and `
+        registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+        spelling = {
+          enabled = true,
+          suggestions = 20,
+        },
+      },
       icons = {
-        mappings = true,
-        rules = true,
+        breadcrumb = "»",
+        separator = "→",
+        group = "+",
       },
       win = {
         border = "rounded",
+        padding = { 1, 2, 1, 2 },
       },
     })
-
-    -- Example keymaps
-    wk.add({
-  { "<leader>f", group = "file" },
-  { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find File" },
-  { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live Grep" },
-  })
-
   end,
 }
