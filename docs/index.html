@@ -107,34 +107,37 @@
         }
         
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             font-weight: bold;
             text-decoration: none;
             transition: all 0.2s ease;
             cursor: pointer;
-            border: none;
+            border: 1px solid transparent;
         }
         
-        .btn-primary {
-            background-color: var(--lavender);
-            color: var(--base);
-        }
-        .btn-primary:hover {
-            background-color: var(--pink);
-            color: var(--base);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(195, 166, 255, 0.2);
-        }
-        
-        .btn-secondary {
-            background-color: var(--surface0);
+        .btn-primary { /* Star on GitHub style */
+            background-color: var(--crust);
+            border-color: var(--surface0);
             color: var(--text);
         }
+        .btn-primary:hover {
+            background-color: var(--surface0);
+            border-color: var(--surface1);
+            color: var(--text);
+        }
+        
+        .btn-secondary { /* Get Started style */
+            background-color: #31313c; /* A neutral dark gray from screenshot */
+            color: var(--text);
+            border-color: #4a4a58;
+        }
         .btn-secondary:hover {
-            background-color: var(--surface1);
-            transform: translateY(-2px);
+            background-color: #3f3f4c;
         }
         
         /* --- Header / Navbar --- */
@@ -186,19 +189,9 @@
             text-align: center;
             padding: 6rem 0;
         }
-        #hero .hero-logo {
-            background-color: var(--base);
-            padding: 1rem;
-            border: 1px solid var(--surface0);
-            border-radius: 8px;
+        #hero .hero-logo-container {
             margin-bottom: 2rem;
-        }
-        #hero h1 {
-            font-size: 4rem;
-            background: linear-gradient(45deg, var(--lavender), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            display: inline-block;
         }
         #hero .version-badge {
             display: inline-block;
@@ -214,6 +207,7 @@
             font-size: 1.25rem;
             max-width: 700px;
             margin: 0 auto 2.5rem auto;
+            color: var(--subtext1);
         }
         #hero .cta-buttons {
             display: flex;
@@ -436,7 +430,6 @@
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
-            #hero h1 { font-size: 3rem; }
             h2 { font-size: 1.75rem; }
 
             .nav-menu {
@@ -507,15 +500,16 @@
     <main>
         <section id="hero">
             <div class="container">
-                <div class="hero-logo">
-                    <img alt="NvShade Banner" src="https://github.com/user-attachments/assets/7b67aba9-5e76-4587-b014-611f8ece3c32" />
+                <div class="hero-logo-container">
+                    <img alt="NvShade Banner Logo" src="https://github.com/user-attachments/assets/7b67aba9-5e76-4587-b014-611f8ece3c32" />
                 </div>
-                <h1>NvShade</h1>
-                <span class="version-badge">Version 1.1.0</span>
+                <div style="margin-top:2.5rem;">
+                  <span class="version-badge">Version 1.1.0</span>
+                </div>
                 <p class="subtitle">A fiercely forged Neovim configuration for the modern developer. Not a bloated framework, but a sharp, responsive tool for a complete IDE experience.</p>
                 <div class="cta-buttons">
-                    <a href="#installation" class="btn btn-primary">🚀 Get Started</a>
-                    <a href="https://github.com/shadowdevforge/NvShade" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">⭐ Star on GitHub</a>
+                    <a href="#installation" class="btn btn-secondary">🚀&nbsp; Get Started</a>
+                    <a href="https://github.com/shadowdevforge/NvShade" target="_blank" rel="noopener noreferrer" class="btn btn-primary">⭐&nbsp; Star on GitHub</a>
                 </div>
             </div>
         </section>
