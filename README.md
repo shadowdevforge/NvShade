@@ -7,6 +7,12 @@ A fiercely forged Neovim configuration for the modern developer. **Version 1.1.0
 
 </div>
 
+<div align="center">
+
+✨ **View the live, interactive website at [shadowdevforge.github.io/NvShade/](https://shadowdevforge.github.io/NvShade/)** ✨
+
+</div>
+
 **NvShade** is a meticulously crafted Neovim configuration that emphasizes performance, clarity, and developer ergonomics. It is not a bloated framework, but a sharp, responsive tool that provides a complete IDE experience without sacrificing the speed and soul of Neovim.
 
 It is built on a foundation of modern, community-standard plugins and a deep respect for the user's ability to customize their own tools.
