@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NvShade v1.1.0 - A Fiercely Forged Neovim Configuration</title>
+  <title>NvShade - A Fiercely Forged Neovim Configuration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* Deep Forge Theme */
     :root {
@@ -22,723 +25,349 @@
       --pink: #e0b0ff;
       --red: #f87a94;
       --green: #8ff0a4;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, var(--base) 0%, var(--mantle) 50%, var(--crust) 100%);
+      font-family: var(--font-sans);
+      background-color: var(--base);
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 
-    /* Navigation */
+    /* --- Navigation --- */
     nav {
-      padding: 1.5rem 0;
-      background: rgba(26, 16, 38, 0.9);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 1.25rem 0;
+      background: rgba(26, 16, 38, 0.85);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--surface0);
     }
-
-    nav .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
     .logo {
-      font-size: 1.75rem;
-      font-weight: 700;
+      font-size: 1.75rem; font-weight: 700;
       background: linear-gradient(135deg, var(--lavender), var(--pink));
-      -webkit-background-clip: text;
+      -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-      align-items: center;
-    }
-
-    .nav-links a {
-      color: var(--subtext1);
+      display: flex; align-items: center; gap: 0.75rem;
       text-decoration: none;
-      transition: color 0.3s;
-      font-weight: 500;
     }
-
-    .nav-links a:hover {
-      color: var(--lavender);
+    .logo svg { height: 28px; width: 28px; }
+    .desktop-nav { display: none; }
+    @media (min-width: 992px) {
+      .desktop-nav { display: flex; gap: 2rem; list-style: none; align-items: center; }
+      .desktop-nav a { color: var(--subtext1); text-decoration: none; transition: color 0.3s; font-weight: 500; }
+      .desktop-nav a:hover { color: var(--lavender); }
     }
-
-    /* Hero Section */
-    .hero {
-      padding: 6rem 0 4rem;
-      text-align: center;
-      position: relative;
+    
+    /* --- Mobile Navigation --- */
+    .mobile-nav-toggle {
+        display: flex; flex-direction: column; justify-content: space-around;
+        width: 30px; height: 24px; background: transparent;
+        border: none; cursor: pointer; padding: 0; z-index: 1002;
     }
-
-    .hero-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--surface1), var(--surface2));
-      color: var(--text);
-      padding: 0.5rem 1.5rem;
-      border-radius: 2rem;
-      font-weight: 600;
-      margin-bottom: 2rem;
-      border: 1px solid var(--lavender);
-      animation: fadeInUp 0.8s ease-out;
+    .mobile-nav-toggle .line { width: 30px; height: 3px; background-color: var(--text); border-radius: 10px; transition: all 0.3s ease-in-out; }
+    .mobile-nav-toggle.is-open .line:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+    .mobile-nav-toggle.is-open .line:nth-child(2) { opacity: 0; }
+    .mobile-nav-toggle.is-open .line:nth-child(3) { transform: translateY(-11px) rotate(-45deg); }
+    .mobile-nav {
+        position: fixed; top: 0; right: 0; height: 100%; width: 280px;
+        background: rgba(35, 23, 54, 0.9); backdrop-filter: blur(15px);
+        transform: translateX(100%); transition: transform 0.3s ease-in-out;
+        z-index: 1001; padding-top: 100px;
     }
-
-    .hero h1 {
-      font-size: 4.5rem;
-      font-weight: 800;
-      margin-bottom: 1.5rem;
-      color: var(--lavender);
-      animation: fadeInUp 0.8s ease-out 0.2s backwards;
-      letter-spacing: -0.02em;
+    .mobile-nav.is-open { transform: translateX(0); }
+    .mobile-nav ul { list-style: none; }
+    .mobile-nav li a { display: block; padding: 1rem 2rem; font-size: 1.25rem; color: var(--text); text-decoration: none; transition: background-color 0.2s; }
+    .mobile-nav li a:hover { background-color: var(--surface0); color: var(--lavender); }
+    .overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s; z-index: 1000;
     }
+    .overlay.is-open { opacity: 1; visibility: visible; }
+    @media (min-width: 992px) { .mobile-nav-toggle { display: none; } }
 
-    .hero .tagline {
-      font-size: 1.5rem;
-      color: var(--text);
-      max-width: 800px;
-      margin: 0 auto 3rem;
-      font-weight: 300;
-      animation: fadeInUp 0.8s ease-out 0.4s backwards;
+    /* --- Hero Section --- */
+    .hero { padding: 6rem 0 4rem; text-align: center; background: linear-gradient(180deg, var(--base) 0%, var(--mantle) 100%); }
+    .hero-badge { display: inline-block; background: var(--surface0); color: var(--pink); padding: 0.5rem 1.5rem; border-radius: 2rem; font-weight: 600; margin-bottom: 2rem; border: 1px solid var(--surface1); animation: fadeInUp 0.8s ease-out; }
+    .hero h1 { font-size: 4.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--pink); animation: fadeInUp 0.8s ease-out 0.2s backwards; letter-spacing: -0.02em; }
+    .hero .tagline { font-size: 1.5rem; color: var(--text); max-width: 800px; margin: 0 auto 3rem; font-weight: 300; animation: fadeInUp 0.8s ease-out 0.4s backwards; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; animation: fadeInUp 0.8s ease-out 0.6s backwards; flex-wrap: wrap; }
+    .btn { padding: 1rem 2.5rem; border-radius: 0.75rem; font-weight: 600; text-decoration: none; transition: all 0.3s; border: none; cursor: pointer; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.75rem; }
+    .btn-primary { background: linear-gradient(135deg, var(--lavender), var(--pink)); color: var(--base); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(195, 166, 255, 0.4); }
+    .btn-secondary { background: var(--surface0); color: var(--text); border: 1px solid var(--surface1); }
+    .btn-secondary:hover { background: var(--surface1); transform: translateY(-3px); }
+
+    /* --- Sections & Cards --- */
+    section { padding: 6rem 0; }
+    .section-title { text-align: center; font-size: 3rem; font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, var(--lavender), var(--blue)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .section-subtitle { text-align: center; color: var(--subtext1); font-size: 1.25rem; margin-bottom: 4rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .principles-grid, .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+    .principle-card, .feature-card {
+      background: var(--crust); border: 1px solid var(--surface0); border-radius: 1rem;
+      padding: 2rem; transition: all 0.3s; position: relative; overflow: hidden;
     }
+    .principle-card::before, .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--lavender), var(--pink)); transform: scaleX(0); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); transform-origin: left; }
+    .principle-card:hover, .feature-card:hover { transform: translateY(-5px); border-color: var(--lavender); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); }
+    .principle-card:hover::before, .feature-card:hover::before { transform: scaleX(1); }
+    .principle-icon, .feature-icon-wrapper { font-size: 2.5rem; margin-bottom: 1rem; color: var(--lavender); }
+    .principle-card h3, .feature-card h3 { font-size: 1.5rem; color: var(--lavender); margin-bottom: 0.5rem; }
+    .principle-card .subtitle { color: var(--pink); font-size: 0.9rem; margin-bottom: 1rem; font-style: italic; }
+    .principle-card p, .feature-card p { color: var(--subtext1); line-height: 1.7; }
+    .feature-card ul { list-style: none; margin-top: 1rem; }
+    .feature-card li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: var(--subtext1); }
+    .feature-card li::before { content: '▹'; position: absolute; left: 0; color: var(--lavender); font-weight: bold; }
+    .feature-card li strong { color: var(--text); }
 
-    .cta-buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      animation: fadeInUp 0.8s ease-out 0.6s backwards;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 1rem 2.5rem;
-      border-radius: 0.75rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--lavender), var(--pink));
-      color: var(--base);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(195, 166, 255, 0.4);
-    }
-
-    .btn-secondary {
-      background: var(--surface1);
-      color: var(--text);
-      border: 1px solid var(--surface2);
-    }
-
-    .btn-secondary:hover {
-      background: var(--surface2);
-      transform: translateY(-2px);
-    }
-
-    /* Philosophy Section */
-    .philosophy {
-      padding: 5rem 0;
-      background: linear-gradient(180deg, transparent, rgba(26, 16, 38, 0.5), transparent);
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      background: linear-gradient(135deg, var(--lavender), var(--blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      color: var(--subtext1);
-      font-size: 1.25rem;
-      margin-bottom: 4rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .principles-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .principle-card {
-      background: var(--crust);
-      border: 1px solid var(--surface0);
-      border-radius: 1rem;
-      padding: 2rem;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .principle-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--lavender), var(--pink));
-      transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-
-    .principle-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--lavender);
-      box-shadow: 0 15px 40px rgba(195, 166, 255, 0.2);
-    }
-
-    .principle-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .principle-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .principle-card h3 {
-      font-size: 1.5rem;
-      color: var(--lavender);
-      margin-bottom: 0.5rem;
-    }
-
-    .principle-card .subtitle {
-      color: var(--pink);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      font-style: italic;
-    }
-
-    .principle-card p {
-      color: var(--subtext1);
-      line-height: 1.7;
-    }
-
-    /* Features Section */
-    .features {
-      padding: 5rem 0;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .feature-card {
-      background: var(--crust);
-      border: 1px solid var(--surface0);
-      border-radius: 1rem;
-      padding: 2rem;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--lavender), var(--pink));
-      transform: scaleX(0);
-      transition: transform 0.3s;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--lavender);
-      box-shadow: 0 15px 40px rgba(195, 166, 255, 0.2);
-    }
-
-    .feature-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .feature-icon {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, var(--lavender), var(--pink));
-      border-radius: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .feature-card h3 {
-      font-size: 1.5rem;
-      color: var(--lavender);
-      margin-bottom: 1rem;
-    }
-
-    .feature-card ul {
-      list-style: none;
-      margin-top: 1rem;
-    }
-
-    .feature-card li {
-      padding: 0.5rem 0;
-      padding-left: 1.5rem;
-      position: relative;
-      color: var(--subtext1);
-    }
-
-    .feature-card li::before {
-      content: '▹';
-      position: absolute;
-      left: 0;
-      color: var(--lavender);
-      font-weight: bold;
-    }
-
-    .feature-card li strong {
-      color: var(--text);
-    }
-
-    /* Installation Section */
-    .installation {
-      padding: 5rem 0;
-      background: linear-gradient(180deg, transparent, rgba(26, 16, 38, 0.5), transparent);
-    }
-
-    .install-tabs {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-
-    .tab-btn {
-      padding: 0.75rem 2rem;
-      background: var(--surface1);
-      color: var(--text);
-      border: 1px solid var(--surface2);
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: 600;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--lavender), var(--pink));
-      color: var(--base);
-      border-color: var(--lavender);
-    }
-
-    .tab-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .code-container {
-      background: var(--crust);
-      border: 1px solid var(--surface0);
-      border-radius: 1rem;
-      overflow: hidden;
-      margin-top: 2rem;
-    }
-
-    .code-header {
-      background: var(--mantle);
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--surface0);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .code-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .code-dot.red { background: var(--red); }
-    .code-dot.yellow { background: #ffd700; }
-    .code-dot.green { background: var(--green); }
-
-    .code-content {
-      padding: 2rem;
-      font-family: 'Courier New', monospace;
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: var(--text);
-      overflow-x: auto;
-    }
-
-    .code-line {
-      display: block;
-    }
-
+    /* --- Installation Section --- */
+    .install-tabs { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
+    .tab-btn { padding: 0.75rem 2rem; background: var(--surface1); color: var(--text); border: 1px solid var(--surface2); border-radius: 0.5rem; cursor: pointer; transition: all 0.3s; font-weight: 600; }
+    .tab-btn.active { background: linear-gradient(135deg, var(--lavender), var(--pink)); color: var(--base); border-color: transparent; }
+    .tab-btn:hover { transform: translateY(-2px); }
+    .tab-content { display: none; opacity: 0; transition: opacity 0.4s ease-in-out; }
+    .tab-content.active { display: block; opacity: 1; }
+    .code-container { background: var(--crust); border: 1px solid var(--surface0); border-radius: 1rem; overflow: hidden; margin-top: 2rem; }
+    .code-header { background: var(--mantle); padding: 1rem 1.5rem; border-bottom: 1px solid var(--surface0); display: flex; justify-content: space-between; align-items: center; }
+    .window-dots { display: flex; gap: 0.5rem; }
+    .code-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .code-dot.red { background: var(--red); } .code-dot.yellow { background: #ffd700; } .code-dot.green { background: var(--green); }
+    .copy-btn { background: var(--surface1); color: var(--text); border: none; padding: 0.3rem 0.8rem; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; font-weight: 500; font-family: var(--font-sans); }
+    .copy-btn:hover { background: var(--surface2); }
+    .code-content { padding: 1.5rem; font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.8; color: var(--text); overflow-x: auto; }
+    .code-line { display: block; }
     .comment { color: var(--subtext0); }
     .command { color: var(--green); }
 
-    /* Footer */
-    footer {
-      padding: 3rem 0;
-      text-align: center;
-      border-top: 1px solid var(--surface0);
-      margin-top: 5rem;
-    }
+    /* --- Footer --- */
+    footer { padding: 4rem 0 2rem; text-align: center; border-top: 1px solid var(--surface0); margin-top: 5rem; background-color: var(--mantle); }
+    .footer-quote { max-width: 800px; margin: 0 auto 3rem; padding: 2rem; background: var(--crust); border-left: 4px solid var(--lavender); border-radius: 0.5rem; font-style: italic; color: var(--subtext1); text-align: left; }
+    footer p { color: var(--subtext1); margin: 0.5rem 0; }
+    footer a { color: var(--lavender); text-decoration: none; transition: color 0.3s; }
+    footer a:hover { color: var(--pink); text-decoration: underline; }
+    .footer-links { display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
 
-    .footer-content {
-      margin-bottom: 2rem;
-    }
-
-    .footer-quote {
-      max-width: 800px;
-      margin: 0 auto 2rem;
-      padding: 2rem;
-      background: var(--crust);
-      border-left: 4px solid var(--lavender);
-      border-radius: 0.5rem;
-      font-style: italic;
-      color: var(--subtext1);
-    }
-
-    footer p {
-      color: var(--subtext1);
-      margin: 0.5rem 0;
-    }
-
-    footer a {
-      color: var(--lavender);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    footer a:hover {
-      color: var(--pink);
-      text-decoration: underline;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-
-      .hero .tagline {
-        font-size: 1.1rem;
-      }
-
-      .section-title {
-        font-size: 2rem;
-      }
-
-      .features-grid,
-      .principles-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .nav-links {
-        gap: 1rem;
-      }
-
-      .cta-buttons {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 991px) {
+      .hero h1 { font-size: 3rem; }
+      .hero .tagline { font-size: 1.2rem; }
+      .section-title { font-size: 2.25rem; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 80%; justify-content: center; }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
   <nav>
     <div class="container">
-      <div class="logo">⚡ NvShade</div>
-      <ul class="nav-links">
+      <a href="#" class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        NvShade
+      </a>
+      <ul class="desktop-nav">
         <li><a href="#philosophy">Philosophy</a></li>
         <li><a href="#features">Features</a></li>
         <li><a href="#install">Install</a></li>
         <li><a href="https://github.com/shadowdevforge/NvShade" target="_blank">GitHub</a></li>
       </ul>
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open navigation menu">
+          <span class="line"></span><span class="line"></span><span class="line"></span>
+      </button>
     </div>
   </nav>
+  <div class="overlay" id="overlay"></div>
+  <nav class="mobile-nav" id="mobile-nav">
+      <ul>
+          <li><a href="#philosophy">Philosophy</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="https://github.com/shadowdevforge/NvShade" target="_blank">GitHub</a></li>
+      </ul>
+  </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-badge">Version 1.1.0</div>
-      <h1>NvShade</h1>
-      <p class="tagline">A fiercely forged Neovim configuration for the modern developer</p>
-      <div class="cta-buttons">
-        <a href="#install" class="btn btn-primary">
-          <span>🚀</span>
-          Get Started
-        </a>
-        <a href="https://github.com/shadowdevforge/NvShade" class="btn btn-secondary" target="_blank">
-          <span>⭐</span>
-          Star on GitHub
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Philosophy Section -->
-  <section class="philosophy" id="philosophy">
-    <div class="container">
-      <h2 class="section-title">The NvShade Philosophy</h2>
-      <p class="section-subtitle">Every feature, keymap, and design choice serves these guiding principles</p>
-
-      <div class="principles-grid">
-        <div class="principle-card">
-          <div class="principle-icon">⚡</div>
-          <h3>The Swift Shadow</h3>
-          <p class="subtitle">Performance First</p>
-          <p>NvShade must be imperceptibly fast. A sub-50ms startup is the standard, achieved through disciplined, strategic lazy-loading via lazy.nvim.</p>
-        </div>
-
-        <div class="principle-card">
-          <div class="principle-icon">🔨</div>
-          <h3>The Forged Core</h3>
-          <p class="subtitle">Modularity</p>
-          <p>The configuration is built from strong, independent, and easily understood parts. The entire structure under lua/forge/ is designed for maintainability and understanding.</p>
-        </div>
-
-        <div class="principle-card">
-          <div class="principle-icon">💡</div>
-          <h3>Light in the Shade</h3>
-          <p class="subtitle">Intuitive Discovery</p>
-          <p>Complexity is hidden until needed. The editor teaches you its features through discoverable keymaps (which-key) and a clear, consistent structure.</p>
-        </div>
-
-        <div class="principle-card">
-          <div class="principle-icon">🎨</div>
-          <h3>The Master Template</h3>
-          <p class="subtitle">Malleable</p>
-          <p>NvShade provides a powerful default setup but makes it trivial to override any setting in a central config.lua file, allowing you to forge it into your own perfect tool.</p>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">Version 1.1.0</div>
+        <h1>NvShade</h1>
+        <p class="tagline">A fiercely forged Neovim configuration for the modern developer</p>
+        <div class="cta-buttons">
+          <a href="#install" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Get Started
+          </a>
+          <a href="https://github.com/shadowdevforge/NvShade" class="btn btn-secondary" target="_blank">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.9l4.95-4.95a7 7 0 1 0-9.9 0L12 20.9z"/></svg>
+            Star on GitHub
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Features Section -->
-  <section class="features" id="features">
-    <div class="container">
-      <h2 class="section-title">🆕 What's New in v1.1.0</h2>
-      <p class="section-subtitle">Major enhancements to theming, user experience, and performance</p>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🎨</div>
-          <h3>Enhanced Theme System</h3>
-          <ul>
-            <li><strong>Dynamic Theme Switching:</strong> Integrated themery.nvim for seamless theme exploration</li>
-            <li><strong>Expanded Collection:</strong> 15+ curated colorschemes including Catppuccin, Nightfox, Nord, and Synthweave</li>
-            <li><strong>Live Preview:</strong> See themes in real-time before applying</li>
-            <li><strong>Quick Access:</strong> Press &lt;leader&gt;t or use dashboard button</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">✨</div>
-          <h3>Refined User Experience</h3>
-          <ul>
-            <li><strong>Improved Dashboard:</strong> Added Theme Explorer button for instant customization</li>
-            <li><strong>Better Integration:</strong> Seamless coordination between bufferline, nvim-tree, and themes</li>
-            <li><strong>Enhanced Autocomplete:</strong> Optimized cmp with better source priorities</li>
-            <li><strong>Smarter Keybindings:</strong> Intuitive shortcuts with improved which-key integration</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Performance & Stability</h3>
-          <ul>
-            <li><strong>Optimized Loading:</strong> Strategic event-based loading reduces startup time</li>
-            <li><strong>Better Error Handling:</strong> Graceful fallbacks for missing dependencies</li>
-            <li><strong>Cleaner Architecture:</strong> Improved modularity in plugin specifications</li>
-            <li><strong>Resource Efficient:</strong> Lazy loading and smart caching throughout</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Installation Section -->
-  <section class="installation" id="install">
-    <div class="container">
-      <h2 class="section-title">🚀 Installation</h2>
-      <p class="section-subtitle">Get started with NvShade in seconds</p>
-
-      <div class="install-tabs">
-        <button class="tab-btn active" onclick="switchTab('linux')">🐧 Linux / macOS</button>
-        <button class="tab-btn" onclick="switchTab('windows')">🪟 Windows</button>
-      </div>
-
-      <div id="linux-tab" class="tab-content active">
-        <div class="code-container">
-          <div class="code-header">
-            <div class="code-dot red"></div>
-            <div class="code-dot yellow"></div>
-            <div class="code-dot green"></div>
-            <span style="margin-left: 1rem; color: var(--subtext1);">Terminal</span>
+    <section class="philosophy" id="philosophy">
+      <div class="container">
+        <h2 class="section-title">The NvShade Philosophy</h2>
+        <p class="section-subtitle">Every feature, keymap, and design choice serves these guiding principles</p>
+        <div class="principles-grid">
+          <div class="principle-card">
+            <div class="principle-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <h3>The Swift Shadow</h3><p class="subtitle">Performance First</p>
+            <p>NvShade must be imperceptibly fast. A sub-50ms startup is the standard, achieved through disciplined, strategic lazy-loading via lazy.nvim.</p>
           </div>
-          <div class="code-content">
-<span class="code-line"><span class="comment"># 1. Backup your existing configuration</span></span>
+          <div class="principle-card">
+            <div class="principle-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+            <h3>The Forged Core</h3><p class="subtitle">Modularity</p>
+            <p>The configuration is built from strong, independent, and easily understood parts. The entire structure under lua/forge/ is designed for maintainability.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg></div>
+            <h3>Light in the Shade</h3><p class="subtitle">Intuitive Discovery</p>
+            <p>Complexity is hidden until needed. The editor teaches you its features through discoverable keymaps (which-key) and a clear, consistent structure.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <h3>The Master Template</h3><p class="subtitle">Malleable</p>
+            <p>NvShade provides a powerful default setup but makes it trivial to override any setting in a central config.lua file, allowing you to forge it into your own perfect tool.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container">
+        <h2 class="section-title">🆕 What's New in v1.1.0</h2>
+        <p class="section-subtitle">Major enhancements to theming, user experience, and performance</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z"/><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></div>
+            <h3>Enhanced Theme System</h3>
+            <ul>
+              <li><strong>Dynamic Switching:</strong> Integrated themery.nvim for seamless theme exploration.</li>
+              <li><strong>Expanded Collection:</strong> 15+ curated colorschemes (Catppuccin, Nightfox, etc).</li>
+              <li><strong>Live Preview:</strong> See themes in real-time before applying.</li>
+            </ul>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l-6-6 6-6"/></svg></div>
+            <h3>Refined UX</h3>
+            <ul>
+              <li><strong>Improved Dashboard:</strong> Added a Theme Explorer button for instant customization.</li>
+              <li><strong>Enhanced Autocomplete:</strong> Optimized cmp with better source priorities.</li>
+              <li><strong>Smarter Keybindings:</strong> More intuitive shortcuts with improved which-key integration.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="installation" id="install">
+      <div class="container">
+        <h2 class="section-title">🚀 Installation</h2>
+        <p class="section-subtitle">Get started with NvShade in seconds. Requires Neovim v0.8.0+, a Nerd Font, Git, and a C compiler.</p>
+        <div class="install-tabs">
+          <button class="tab-btn active" data-tab="linux">🐧 Linux / macOS</button>
+          <button class="tab-btn" data-tab="windows">🪟 Windows</button>
+        </div>
+        <div id="linux-tab" class="tab-content active">
+          <div class="code-container">
+            <div class="code-header"><div class="window-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div><button class="copy-btn">Copy</button></div>
+            <pre class="code-content"><code><span class="code-line"><span class="comment"># 1. Backup your existing configuration</span></span>
 <span class="code-line"><span class="command">mv ~/.config/nvim ~/.config/nvim.backup</span></span>
 <span class="code-line"></span>
 <span class="code-line"><span class="comment"># 2. Clone NvShade</span></span>
 <span class="code-line"><span class="command">git clone https://github.com/shadowdevforge/NvShade.git ~/.config/nvim</span></span>
 <span class="code-line"></span>
 <span class="code-line"><span class="comment"># 3. Launch Neovim (plugins install automatically)</span></span>
-<span class="code-line"><span class="command">nvim</span></span>
+<span class="code-line"><span class="command">nvim</span></span></code></pre>
           </div>
         </div>
-      </div>
-
-      <div id="windows-tab" class="tab-content">
-        <div class="code-container">
-          <div class="code-header">
-            <div class="code-dot red"></div>
-            <div class="code-dot yellow"></div>
-            <div class="code-dot green"></div>
-            <span style="margin-left: 1rem; color: var(--subtext1);">PowerShell</span>
-          </div>
-          <div class="code-content">
-<span class="code-line"><span class="comment"># 1. Backup your existing configuration</span></span>
+        <div id="windows-tab" class="tab-content">
+          <div class="code-container">
+            <div class="code-header"><div class="window-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div><button class="copy-btn">Copy</button></div>
+            <pre class="code-content"><code><span class="code-line"><span class="comment"># 1. Backup your existing configuration</span></span>
 <span class="code-line"><span class="command">Move-Item $env:LOCALAPPDATA\nvim $env:LOCALAPPDATA\nvim.backup</span></span>
 <span class="code-line"></span>
 <span class="code-line"><span class="comment"># 2. Clone NvShade</span></span>
 <span class="code-line"><span class="command">git clone https://github.com/shadowdevforge/NvShade.git $env:LOCALAPPDATA\nvim</span></span>
 <span class="code-line"></span>
 <span class="code-line"><span class="comment"># 3. Launch Neovim (plugins install automatically)</span></span>
-<span class="code-line"><span class="command">nvim</span></span>
+<span class="code-line"><span class="command">nvim</span></span></code></pre>
           </div>
         </div>
       </div>
+    </section>
+  </main>
 
-      <div style="margin-top: 3rem; text-align: center;">
-        <h3 style="color: var(--lavender); margin-bottom: 1rem;">Prerequisites</h3>
-        <p style="color: var(--subtext1); max-width: 800px; margin: 0 auto;">
-          Requires Neovim v0.8.0+, a Nerd Font (FiraCode recommended), Git, and a C compiler for Treesitter.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
   <footer>
     <div class="container">
-      <div class="footer-quote">
-        "Bram Moolenaar's legacy made it possible for me to create NvShade. This distro is my small way of thanking him and the community, and of continuing the foundational philosophy of Vim/Neovim. The 'Help Uganda' button on the dashboard is a small tribute to that spirit."
-      </div>
-      
+      <div class="footer-quote">"Bram Moolenaar's legacy made it possible... This distro is my small way of thanking him and the community. The 'Help Uganda' button on the dashboard is a small tribute to that spirit."</div>
       <div class="footer-content">
-        <p><strong>NvShade v1.1.0</strong></p>
-        <p style="color: var(--subtext0); margin-top: 0.5rem;">NvShade forged</p>
-        
+        <p><strong>NvShade v1.1.0</strong> | Fiercely Forged</p>
         <div class="footer-links">
           <a href="https://github.com/shadowdevforge/NvShade">⭐ Star on GitHub</a>
           <a href="https://github.com/shadowdevforge/NvShade/issues">🐛 Report Bug</a>
-          <a href="https://github.com/shadowdevforge/NvShade/issues">💡 Request Feature</a>
-          <a href="https://github.com/shadowdevforge/NvShade/wiki">📚 Documentation</a>
         </div>
       </div>
-
-      <p style="margin-top: 2rem; color: var(--subtext0); font-size: 0.9rem;">
-        Special thanks to <a href="https://github.com/NvChad/NvChad">NvChad</a> and <a href="https://github.com/folke">Folke Postma</a> for inspiration
-      </p>
     </div>
   </footer>
 
   <script>
-    function switchTab(os) {
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- Tab Switching Logic ---
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          const tabName = event.target.dataset.tab;
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          event.target.classList.add('active');
+          tabContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === `${tabName}-tab`) {
+              content.classList.add('active');
+            }
+          });
+        });
       });
 
-      // Show selected tab
-      document.getElementById(os + '-tab').classList.add('active');
-      event.target.classList.add('active');
-    }
+      // --- Mobile Navigation ---
+      const navToggle = document.getElementById('mobile-nav-toggle');
+      const mobileNav = document.getElementById('mobile-nav');
+      const overlay = document.getElementById('overlay');
+      const mobileNavLinks = mobileNav.querySelectorAll('a');
+      function closeMenu() {
+        navToggle.classList.remove('is-open');
+        mobileNav.classList.remove('is-open');
+        overlay.classList.remove('is-open');
+      }
+      navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('is-open');
+        mobileNav.classList.toggle('is-open');
+        overlay.classList.toggle('is-open');
+      });
+      overlay.addEventListener('click', closeMenu);
+      mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+      // --- Copy to Clipboard ---
+      document.querySelectorAll('.copy-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const codeBlock = button.closest('.code-container').querySelector('code');
+          navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+            button.innerText = 'Copied!';
+            setTimeout(() => { button.innerText = 'Copy'; }, 2000);
+          });
+        });
+      });
+    });
   </script>
 </body>
 </html>
