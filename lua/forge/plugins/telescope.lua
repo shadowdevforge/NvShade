@@ -17,18 +17,11 @@ return {
       winblend = 0,
       prompt_prefix = "  ",
       selection_caret = " ",
-      mappings = {
-        i = {
-          ["<C-j>"] = require("telescope.actions").move_selection_next,
-          ["<C-k>"] = require("telescope.actions").move_selection_previous,
-          ["<C-Down>"] = require("telescope.actions").preview_scrolling_down,
-          ["<C-Up>"] = require("telescope.actions").preview_scrolling_up,
-        },
       },
     },
   },
   -- The config function now receives the final, merged options
-  config = function(_, opts)
+  config == function(_, opts)
     local telescope = require("telescope")
     telescope.setup(opts)
 
@@ -41,5 +34,4 @@ return {
     map("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
     map("n", "<leader>fo", builtin.oldfiles, { desc = "[F]ind [O]ld Files" })
     map("n", "<leader>fc", builtin.git_commits, { desc = "[F]ind Git [C]ommits" })
-  end,
-}
+end
