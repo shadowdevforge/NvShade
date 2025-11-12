@@ -45,7 +45,6 @@ return {
 
     -- Define the list of servers we want to ensure are installed
     local servers = {
-      "lua_ls",
     }
 
 
@@ -81,3 +80,4 @@ return {
   end,
 
 }
+
