@@ -1,10 +1,13 @@
+-- TO START CONFIGURING RUN THE BELOW COMMAND
+-- FOR LINUX
+-- mv ~/.config/nvim/lua/forge/plugins/init.lua.bak ~/.config/nvim/lua/forge/plugins/init.lua 
+-- FOR WINDOWS
+-- Move-Item -Path "$HOME\.config\nvim\lua\forge\plugins\init.lua.bak" -Destination "$HOME\.config\nvim\lua\forge\plugins\init.lua" 
+------------------------------------------------------------------------------------------------------------------------------------
 -- ~/.config/nvim/lua/forge/config.lua
 -- This is your personal configuration file for NvShade.
 -- Any plugins defined here will be merged with or added to the core plugins.
 --------------------------------------------------------------------------------------------
--- TO START CONFIGURATION RUN THE BELOW COMMAND
--- mv ~/.config/nvim/lua/forge/plugins/init.lua.bak ~/.config/nvim/lua/forge/plugins/init.lua
-
 
 local M = {}
 
@@ -34,4 +37,5 @@ M.plugins = {
 }
 
 return M
+
 
