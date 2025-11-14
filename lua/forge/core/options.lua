@@ -27,7 +27,7 @@ opt.shortmess:append("c") -- Don't show redundant messages from completion
 --------------------------------------------------------------------------------
 opt.termguicolors = true -- Enable 24-bit RGB color in the TUI
 opt.number = true -- Show line numbers
-opt.relativenumber = true -- Show relative line numbers for easier vertical navigation
+opt.relativenumber = false -- Show relative line numbers for easier vertical navigation
 opt.cursorline = true -- Highlight the current line
 opt.signcolumn = "yes" -- Always show the sign column to prevent layout shifts
 opt.scrolloff = 8 -- Keep 8 lines of context around the cursor when scrolling
@@ -57,3 +57,4 @@ opt.hidden = true -- Allow switching buffers without saving
 opt.updatetime = 300 -- Faster completion and gitsigns 
 opt.timeoutlen = 300 -- Time to wait for a mapped sequence to complete (in ms)
 opt.laststatus = 3 -- Always display the status line
+
