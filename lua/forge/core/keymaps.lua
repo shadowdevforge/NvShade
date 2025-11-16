@@ -32,8 +32,8 @@ vim.keymap.set("n", ";", ":", { noremap = true })
 map("n", "<leader>q", "<Cmd>q<CR>", { desc = "Quit" })
 map("n", "<leader>Q", "<Cmd>qa!<CR>", { desc = "Force Quit All" })
 
--- A more ergonomic escape from insert mode
--- map("i", "jk", "<ESC>") -- This is personal preference, uncomment if you like it
+-- A more fallback escape from insert mode
+vim.api.nvim_set_keymap('i', '\\', '<Esc>', { noremap = true, silent = true })
 
 -- 🌑 Navigation and Window Management
 --------------------------------------------------------------------------------
@@ -75,3 +75,4 @@ map("n", "J", "mzJ`z")
 -- Center the screen on the cursor for next/previous search result
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
+
