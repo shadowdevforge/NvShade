@@ -32,8 +32,9 @@ vim.keymap.set("n", ";", ":", { noremap = true })
 map("n", "<leader>q", "<Cmd>q<CR>", { desc = "Quit" })
 map("n", "<leader>Q", "<Cmd>qa!<CR>", { desc = "Force Quit All" })
 
--- A more fallback escape from insert mode
+-- Fallback for Normal Mode
 vim.api.nvim_set_keymap('i', '\\', '<Esc>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '\\', '<Esc>', { noremap = true, silent = true })
 
 -- 🌑 Navigation and Window Management
 --------------------------------------------------------------------------------
@@ -75,4 +76,5 @@ map("n", "J", "mzJ`z")
 -- Center the screen on the cursor for next/previous search result
 map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
+
 
